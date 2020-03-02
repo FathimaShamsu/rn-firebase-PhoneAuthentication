@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import {
   StyleSheet,
   Text,
@@ -8,30 +8,31 @@ import {
   Modal,
   FlatList,
   Keyboard,
-  TouchableWithoutFeedback
-} from "react-native";
-import { UIActivityIndicator } from "react-native-indicators";
-import PhoneInput from 'react-native-phone-input';
-import firebase from "@react-native-firebase/app";
-import data from './countries';
-import auth from "@react-native-firebase/auth";
-const defaultFlag = data.filter(obj => obj.name === "India")[0].flag;
-const defaultCode = data.filter(obj => obj.name === "India")[0].dial_code;
+  TouchableWithoutFeedback,
+} from 'react-native';
+import { UIActivityIndicator } from 'react-native-indicators';
+import PhoneInput from "react-native-phone-input";
+import firebase from '@react-native-firebase/app';
+import data from "./countries";
+import auth from '@react-native-firebase/auth';
+const defaultFlag = data.filter(obj => obj.name === 'India')[0].flag;
+const defaultCode = data.filter(obj => obj.name === 'India')[0].dial_code;
 
 export default class App extends Component {
   constructor() {
     super();
     this.unsubscribe = null;
     this.state = {
-      phone: '',
+      phone: "",
       flag: defaultFlag,
       modalVisible: false,
-      message: "",
-      codeInput: "",
+      message: '',
+      codeInput: '',
       phoneNumber: defaultCode,
       confirmResult: null,
       spinnerValue: false,
-      phoneAuthSnapshot: "",
+      phoneAuthSnapshot: '',
+      check: "",
     };
   }
 
@@ -62,11 +63,11 @@ export default class App extends Component {
   }
   initialValidation = () => {
     if (
-      this.state.phoneNumber === "" ||
+      this.state.phoneNumber === '' ||
       this.state.phoneNumber === null ||
       this.state.phoneNumber === undefined
     ) {
-      Alert.alert('Enter phone number');
+      Alert.alert("Enter phone number");
     } else {
       this.setState({ spinnerValue: true }, () => {
         this.handleSendCode();
@@ -86,7 +87,7 @@ export default class App extends Component {
         .auth()
         .verifyPhoneNumber(this.state.phoneNumber)
         .on(
-          "state_changed",
+          'state_changed',
           phoneAuthSnapshot => {
             switch (phoneAuthSnapshot.state) {
               case firebase.auth.PhoneAuthState.CODE_SENT: // or 'sent'
@@ -94,7 +95,7 @@ export default class App extends Component {
               case firebase.auth.PhoneAuthState.ERROR: // or 'error'
                 Alert.alert(phoneAuthSnapshot.error.nativeErrorMessage);
                 this.setState({
-                  spinnerValue: false,
+                  spinnerValue: false
                 });
                 console.log(phoneAuthSnapshot.error);
                 break;
@@ -103,7 +104,7 @@ export default class App extends Component {
                 // console.log("phoneAuthSnapshot time out", phoneAuthSnapshot);
                 break;
               case firebase.auth.PhoneAuthState.AUTO_VERIFIED: // or 'verified'
-                Alert.alert("verified");
+                Alert.alert('verified');
                 this.setState({ spinnerValue: false });
                 break;
             }
@@ -116,9 +117,9 @@ export default class App extends Component {
           }
         );
     } else {
-      alert("Invalid Phone Number"), this.setState({ spinnerValue: false });
+      alert('Invalid Phone Number'), this.setState({ spinnerValue: false });
     }
-    this.setState({ phoneAuthSnapshot: null, verificationCode: "" });
+    this.setState({ phoneAuthSnapshot: null, verificationCode: '' });
   };
   verifyByOtp = () => {
     firebase
@@ -131,17 +132,17 @@ export default class App extends Component {
       })
       .catch(error => {
         alert(error.message);
-        console.log("numbr error", error);
+        console.log('numbr error', error);
         this.setState({ spinnerValue: false });
         console.log(error);
       });
   };
   navigationFunction = () => {
-    this.props.navigation.navigate('verification', {
+    this.props.navigation.navigate("verification", {
       phone: this.state.phoneNumber,
       confirmResult: this.state.confirmResult,
       confirmation: this.confirmation,
-      phoneAuthSnapshot: this.state.phoneAuthSnapshot
+      phoneAuthSnapshot: this.state.phoneAuthSnapshot,
     });
   };
   changePhoneNumber = () => {
@@ -169,9 +170,9 @@ export default class App extends Component {
             }}
             value={this.state.phoneNumber}
             textProps={{
-              placeholder: 'Phone Number with country code',
+              placeholder: "Phone Number with country code"
             }}
-            initialCountry={'in'}
+            initialCountry={"in"}
           />
           <Modal
             animationType="slide" // fade
@@ -212,7 +213,7 @@ export default class App extends Component {
           onPress={() => this.initialValidation()}
         >
           <Text style={[styles.buttontext]}>
-            {this.state.phoneAuthSnapshot ? 'Change Phone Number' : 'Use SMS'}
+            {this.state.phoneAuthSnapshot ? "Change Phone Number" : "Use SMS"}
           </Text>
         </TouchableOpacity>
         {this.state.spinnerValue === true ? (
@@ -229,45 +230,45 @@ export default class App extends Component {
 let styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
+    alignItems: "center",
     padding: 20,
-    paddingTop: 60,
+    paddingTop: 60
     // flexDirection: "row",
   },
   page: {
-    height: "10%"
+    height: '10%',
   },
   headingText: {
     fontSize: 17,
-    color: '#808080',
+    color: "#808080"
   },
   themeButton: {
     marginTop: 20,
-    width: '90%',
+    width: "90%",
     height: 50,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#b0c4de',
-    borderColor: "#b0c4de",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#b0c4de",
+    borderColor: '#b0c4de',
     borderWidth: 2,
-    borderRadius: 1,
+    borderRadius: 1
   },
   textInput1: {
     marginTop: 20,
-    width: "90%",
+    width: '90%',
     height: 40,
-    borderColor: "#f0f8ff",
-    backgroundColor: '#f0f8ff',
+    borderColor: '#f0f8ff',
+    backgroundColor: "#f0f8ff",
     borderWidth: 2,
     // borderRadius: 5,
     paddingLeft: 3,
-    color: "black",
-    fontSize: 16
+    color: 'black',
+    fontSize: 16,
   },
   closeButtonStyle: {
-    width: "60%",
-    borderColor: "#b0c4de",
-    backgroundColor: "#f0f8ff",
+    width: '60%',
+    borderColor: '#b0c4de',
+    backgroundColor: '#f0f8ff',
     flexShrink: 1,
     padding: 10,
     height: 40,
@@ -276,59 +277,59 @@ let styles = StyleSheet.create({
     marginLeft: 60,
     borderRadius: 3,
     borderWidth: 0.5,
-    justifyContent: "center",
-    alignItems: "center",
-    alignContent: "center"
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignContent: 'center',
   },
   textStyle: {
     fontSize: 18,
-    justifyContent: 'center',
+    justifyContent: "center",
     // marginLeft: 50,
     padding: 10,
     paddingBottom: 10,
     // alignItems: 'flex-end',
-    textAlign: 'center',
+    textAlign: "center"
   },
   buttontext: {
-    color: '#fffafa',
-    fontSize: 15
+    color: "#fffafa",
+    fontSize: 15,
   },
   flatlistView: {
     flex: 1,
     borderRadius: 30,
-    backgroundColor: 'transparent',
-    width: "100%",
-    padding: 20,
+    backgroundColor: "transparent",
+    width: '100%',
+    padding: 20
   },
   flatlistStyle: {
     flex: 1,
     paddingLeft: 50,
     marginTop: 0,
-    backgroundColor: "#f0f8ff",
+    backgroundColor: '#f0f8ff'
   },
   countryList: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-start"
   },
   countryStyle: {
     fontSize: 15,
-    color: 'black',
-    justifyContent: 'center',
+    color: "black",
+    justifyContent: "center"
   },
   flag: {
     fontSize: 30,
-    justifyContent: "center"
+    justifyContent: 'center',
   },
   spinnerStyle: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center"
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   loadingText: {
     fontSize: 18,
-    color: '#b0c4de',
-  }
+    color: "#b0c4de"
+  },
   // button: {
   //   marginTop: 20,
   //   padding: 10,
