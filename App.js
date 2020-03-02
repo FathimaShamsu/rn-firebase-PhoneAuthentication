@@ -32,7 +32,6 @@ export default class App extends Component {
       confirmResult: null,
       spinnerValue: false,
       phoneAuthSnapshot: '',
-      check: "",
     };
   }
 
